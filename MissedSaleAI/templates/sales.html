@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Sales Ledger – MissedSale AI{% endblock %}
+{% block page_heading %}Order & Transaction Ledger{% endblock %}
+
+{% block content %}
+<div class="card-saas mb-4">
+    <div class="card-body-saas p-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h4 class="text-white mb-1 font-weight-bold"><i class="fas fa-receipt text-primary me-2"></i>Completed Sales & Order History</h4>
+                <p class="text-muted mb-0" style="font-size: 13px;">
+                    Tracks verified store transactions, order amounts, and newly recovered checkout sales.
+                </p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-end">
+                    <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Total Volume</div>
+                    <div class="text-success font-weight-bold font-mono" style="font-size: 22px;">₹{{ "{:,.2f}".format(total_revenue) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sales Table Card -->
+<div class="card-saas">
+    <div class="card-header-saas">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <h5 class="mb-0">All Completed Orders</h5>
+            <span class="badge bg-dark border border-secondary text-secondary font-mono">{{ sales|length }} Records</span>
+        </div>
+    </div>
+    <div class="card-body-saas p-0">
+        <div class="table-responsive">
+            <table class="table-saas mb-0">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Product Ordered</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Transaction Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in sales %}
+                    <tr>
+                        <td class="font-mono text-muted">#ORD-{{ s.id }}</td>
+                        <td>
+                            <a href="{{ url_for('customers.customer_detail', customer_id=s.customer_id) }}" class="text-white text-decoration-none fw-bold">
+                                {{ s.customer.name }}
+                            </a>
+                            <div class="text-muted" style="font-size: 11px;">{{ s.customer.email }}</div>
+                        </td>
+                        <td>
+                            <strong class="text-white">{{ s.product.name if s.product else 'Catalog Product' }}</strong>
+                            <div class="text-muted" style="font-size: 11px;">Category: {{ s.product.category if s.product else 'General' }}</div>
+                        </td>
+                        <td>
+                            <strong class="text-success font-mono" style="font-size: 14px;">₹{{ "{:,.2f}".format(s.amount) }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-success text-white"><i class="fas fa-check-circle me-1"></i>{{ s.status }}</span>
+                        </td>
+                        <td>
+                            <span class="font-mono text-muted" style="font-size: 12px;">{{ s.sale_date.strftime('%Y-%m-%d %I:%M %p') if s.sale_date else 'N/A' }}</span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5">No transactions on record.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

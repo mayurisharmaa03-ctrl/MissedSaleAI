@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Sales Recovery CRM Pipeline – MissedSale AI{% endblock %}
+{% block page_heading %}Autonomous Sales Recovery CRM Pipeline{% endblock %}
+
+{% block content %}
+<div class="card-saas mb-4">
+    <div class="card-body-saas p-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h4 class="text-white mb-1 font-weight-bold"><i class="fas fa-columns text-primary me-2"></i>Integrated CRM Recovery Pipeline</h4>
+                <p class="text-muted mb-0" style="font-size: 13px;">
+                    Track recovery opportunities from initial cart abandonment to autonomous email outreach, manager follow-ups, and confirmed revenue recovery.
+                </p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-primary-saas" onclick="openSendEmailModal()" id="btnCrmSendEmail">
+                    <i class="fas fa-plus me-1"></i> Send Recovery Email
+                </button>
+                <span class="badge bg-dark border border-primary text-primary px-3 py-2 font-mono" style="font-size: 12px;">
+                    {{ total_pipeline }} Total Opportunities
+                </span>
+                <a href="{{ url_for('opportunities.opportunities') }}" class="btn btn-secondary-saas">
+                    <i class="fas fa-list me-1"></i> Table View
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Visual Kanban Pipeline Stages -->
+<div class="kanban-board">
+    <!-- STAGE 1: NEW & ANALYZING -->
+    <div class="kanban-col">
+        <div class="kanban-col-header">
+            <div class="d-flex align-items-center gap-2">
+                <span class="pulse-dot bg-secondary"></span>
+                <strong class="text-white" style="font-size: 13px;">NEW / ANALYZING</strong>
+            </div>
+            <span class="badge bg-dark text-muted font-mono">{{ stages['NEW']|length }}</span>
+        </div>
+        <div class="kanban-cards">
+            {% for opp in stages['NEW'] %}
+            {% include "partials/_crm_card.html" %}
+            {% else %}
+            <div class="text-center text-muted py-4" style="font-size: 12px;">No new opportunities.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- STAGE 2: ACTION REQUIRED -->
+    <div class="kanban-col" style="border-top: 3px solid var(--warning);">
+        <div class="kanban-col-header">
+            <div class="d-flex align-items-center gap-2">
+                <span class="pulse-dot" style="background-color: var(--warning);"></span>
+                <strong class="text-white" style="font-size: 13px;">ACTION REQUIRED</strong>
+            </div>
+            <span class="badge bg-dark text-warning font-mono">{{ stages['ACTION_REQUIRED']|length }}</span>
+        </div>
+        <div class="kanban-cards">
+            {% for opp in stages['ACTION_REQUIRED'] %}
+            {% include "partials/_crm_card.html" %}
+            {% else %}
+            <div class="text-center text-muted py-4" style="font-size: 12px;">No pending actions.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- STAGE 3: EMAIL SENT -->
+    <div class="kanban-col" style="border-top: 3px solid var(--accent);">
+        <div class="kanban-col-header">
+            <div class="d-flex align-items-center gap-2">
+                <span class="pulse-dot" style="background-color: var(--accent);"></span>
+                <strong class="text-white" style="font-size: 13px;">EMAIL SENT</strong>
+            </div>
+            <span class="badge bg-dark text-info font-mono">{{ stages['EMAIL_SENT']|length }}</span>
+        </div>
+        <div class="kanban-cards">
+            {% for opp in stages['EMAIL_SENT'] %}
+            {% include "partials/_crm_card.html" %}
+            {% else %}
+            <div class="text-center text-muted py-4" style="font-size: 12px;">No active sent emails.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- STAGE 4: FOLLOW UP -->
+    <div class="kanban-col" style="border-top: 3px solid var(--purple);">
+        <div class="kanban-col-header">
+            <div class="d-flex align-items-center gap-2">
+                <span class="pulse-dot" style="background-color: var(--purple);"></span>
+                <strong class="text-white" style="font-size: 13px;">FOLLOW UP</strong>
+            </div>
+            <span class="badge bg-dark text-purple font-mono">{{ stages['FOLLOW_UP']|length }}</span>
+        </div>
+        <div class="kanban-cards">
+            {% for opp in stages['FOLLOW_UP'] %}
+            {% include "partials/_crm_card.html" %}
+            {% else %}
+            <div class="text-center text-muted py-4" style="font-size: 12px;">No follow-ups pending.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- STAGE 5: RECOVERED -->
+    <div class="kanban-col" style="border-top: 3px solid var(--success);">
+        <div class="kanban-col-header">
+            <div class="d-flex align-items-center gap-2">
+                <span class="pulse-dot" style="background-color: var(--success);"></span>
+                <strong class="text-white" style="font-size: 13px;">RECOVERED (₹)</strong>
+            </div>
+            <span class="badge bg-dark text-success font-mono">{{ stages['RECOVERED']|length }}</span>
+        </div>
+        <div class="kanban-cards">
+            {% for opp in stages['RECOVERED'] %}
+            {% include "partials/_crm_card.html" %}
+            {% else %}
+            <div class="text-center text-muted py-4" style="font-size: 12px;">No recovered sales yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- STAGE 6: CLOSED / IGNORED -->
+    <div class="kanban-col" style="border-top: 3px solid var(--text-muted);">
+        <div class="kanban-col-header">
+            <div class="d-flex align-items-center gap-2">
+                <strong class="text-muted" style="font-size: 13px;">CLOSED / IGNORED</strong>
+            </div>
+            <span class="badge bg-dark text-muted font-mono">{{ stages['CLOSED']|length }}</span>
+        </div>
+        <div class="kanban-cards">
+            {% for opp in stages['CLOSED'] %}
+            {% include "partials/_crm_card.html" %}
+            {% else %}
+            <div class="text-center text-muted py-4" style="font-size: 12px;">No closed opportunities.</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

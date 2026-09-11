@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Executive Dashboard – MissedSale AI{% endblock %}
+{% block page_heading %}AI Sales Recovery Overview{% endblock %}
+
+{% block content %}
+<!-- AI Agent Autonomous Live Banner -->
+<div class="card-saas mb-4" style="background: linear-gradient(135deg, rgba(30, 27, 75, 0.9), rgba(15, 23, 42, 0.95)); border: 1px solid rgba(99, 102, 241, 0.3);">
+    <div class="card-body-saas p-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="brand-icon" style="width: 48px; height: 48px; font-size: 22px;">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="badge bg-success text-white" style="font-size: 10px; letter-spacing: 0.5px;">AUTONOMOUS LOOP ACTIVE</span>
+                        <span class="text-muted font-mono" style="font-size: 12px;">Loop: OBSERVE ➔ ANALYZE ➔ REASON ➔ DECIDE ➔ ACT ➔ MONITOR ➔ ADAPT</span>
+                    </div>
+                    <h6 class="text-white mb-0" style="font-size: 14px; font-weight: 500;">
+                        Current Agent Focus: <span class="text-accent">{{ agent_global_status.last_decision_summary }}</span>
+                    </h6>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ url_for('agent.agent_control') }}" class="btn btn-primary-saas">
+                    <i class="fas fa-play"></i> Run Agent Control
+                </a>
+                <a href="{{ url_for('agent.agent_activity') }}" class="btn btn-secondary-saas">
+                    <i class="fas fa-history"></i> Full Activity Trace
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Guaranteed Demo Scenario Banner (Rahul Sharma) -->
+<div class="card-saas mb-4" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(99, 102, 241, 0.2)); border: 1.5px solid #38bdf8;">
+    <div class="card-body-saas p-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="badge bg-primary font-mono"><i class="fas fa-star me-1"></i>GUARANTEED DEMO SCENARIO</span>
+                    <span class="badge bg-dark border border-secondary text-light">Section 39 Specification</span>
+                </div>
+                <h5 class="text-white font-weight-bold mb-1">Rahul Sharma – Premium Laptop (₹75,000.00) Cart Recovery</h5>
+                <p class="text-muted mb-0" style="font-size: 13px;">
+                    Simulate the complete autonomous cycle: Abandonment detection ➔ ML inference (91% Lost / 84% Recovery) ➔ HIGH PRIORITY Reasoning ➔ CRM Opportunity #104 ➔ Template 2 Resend Outreach ➔ Converted Recovery.
+                </p>
+            </div>
+            <div>
+                <button class="btn btn-primary-saas px-4 py-2" id="runDemoScenarioBtn" onclick="runGuaranteedDemoScenario()">
+                    <i class="fas fa-play-circle me-1"></i> Execute Demo Scenario
+                </button>
+            </div>
+        </div>
+        <div id="demoScenarioResult" class="mt-3" style="display: none;"></div>
+    </div>
+</div>
+
+<!-- 8 KPI Metric Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-xl-3 col-md-6">
+        <div class="kpi-card">
+            <div class="kpi-title">Recovered Revenue</div>
+            <div class="kpi-value text-success">₹{{ "{:,.2f}".format(kpis.recovered_revenue) }}</div>
+            <div class="kpi-sub"><i class="fas fa-arrow-up text-success me-1"></i> From {{ kpis.recovered_sales_count }} recovered sales</div>
+            <div class="kpi-icon text-success"><i class="fas fa-rupee-sign"></i></div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="kpi-card">
+            <div class="kpi-title">Recovery Rate</div>
+            <div class="kpi-value text-info">{{ kpis.recovery_rate }}%</div>
+            <div class="kpi-sub">{{ kpis.recovered_sales_count }} of {{ kpis.recovery_opportunities }} opportunities</div>
+            <div class="kpi-icon text-info"><i class="fas fa-chart-line"></i></div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="kpi-card">
+            <div class="kpi-title">Potential Lost Sales</div>
+            <div class="kpi-value text-danger">{{ kpis.potential_lost_sales }}</div>
+            <div class="kpi-sub">Detected abandoned carts</div>
+            <div class="kpi-icon text-danger"><i class="fas fa-exclamation-triangle"></i></div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="kpi-card">
+            <div class="kpi-title">High-Priority Targets</div>
+            <div class="kpi-value text-warning">{{ kpis.high_priority_opportunities }}</div>
+            <div class="kpi-sub">Immediate recovery action required</div>
+            <div class="kpi-icon text-warning"><i class="fas fa-bolt"></i></div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="kpi-card">
+            <div class="kpi-title">Total Customers</div>
+            <div class="kpi-value">{{ kpis.total_customers }}</div>
+            <div class="kpi-sub">Tracked CRM leads and VIPs</div>
+            <div class="kpi-icon text-secondary"><i class="fas fa-users"></i></div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="kpi-card">
+            <div class="kpi-title">Active Opportunities</div>
+            <div class="kpi-value">{{ kpis.recovery_opportunities }}</div>
+            <div class="kpi-sub">In recovery pipeline</div>
+            <div class="kpi-icon text-primary"><i class="fas fa-bullseye"></i></div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="kpi-card">
+            <div class="kpi-title">Recovery Emails Sent</div>
+            <div class="kpi-value">{{ kpis.emails_sent }}</div>
+            <div class="kpi-sub">Dispatched via Resend API</div>
+            <div class="kpi-icon text-purple"><i class="fas fa-paper-plane"></i></div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="kpi-card">
+            <div class="kpi-title">Total Completed Sales</div>
+            <div class="kpi-value">₹{{ "{:,.2f}".format(kpis.total_sales_volume) }}</div>
+            <div class="kpi-sub">{{ kpis.total_sales_count }} total completed orders</div>
+            <div class="kpi-icon text-secondary"><i class="fas fa-shopping-bag"></i></div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row g-4 mb-4">
+    <!-- Chart 1: Lost Sales vs Recovered Revenue -->
+    <div class="col-lg-8">
+        <div class="card-saas h-100">
+            <div class="card-header-saas">
+                <h5><i class="fas fa-chart-area text-primary me-2"></i>Lost Sales vs. Recovered Revenue Velocity</h5>
+                <span class="badge bg-dark text-muted font-mono" style="font-size: 11px;">7-Day Rolling Window</span>
+            </div>
+            <div class="card-body-saas">
+                <div style="height: 310px;">
+                    <canvas id="salesTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 2: Priority Distribution Doughnut -->
+    <div class="col-lg-4">
+        <div class="card-saas h-100">
+            <div class="card-header-saas">
+                <h5><i class="fas fa-pie-chart text-warning me-2"></i>Recovery Priority Breakdown</h5>
+            </div>
+            <div class="card-body-saas">
+                <div style="height: 310px;">
+                    <canvas id="priorityDoughnutChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Row 2: Recent Agent Actions & High Priority Opportunities -->
+<div class="row g-4">
+    <!-- High Priority Recovery Opportunities Table -->
+    <div class="col-lg-7">
+        <div class="card-saas h-100">
+            <div class="card-header-saas">
+                <h5><i class="fas fa-fire text-danger me-2"></i>High-Priority Recovery Queue</h5>
+                <a href="{{ url_for('crm.crm_view') }}" class="btn btn-secondary-saas btn-sm">View Full CRM</a>
+            </div>
+            <div class="card-body-saas p-0">
+                <div class="table-responsive">
+                    <table class="table-saas mb-0">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Abandoned Item</th>
+                                <th>Recovery Prob</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for opp in priority_opportunities %}
+                            <tr>
+                                <td>
+                                    <strong>{{ opp.customer.name }}</strong>
+                                    <div class="text-muted" style="font-size: 11px;">{{ opp.customer.customer_value }} Tier</div>
+                                </td>
+                                <td>
+                                    <span>{{ opp.product.name if opp.product else 'Cart Items' }}</span>
+                                    <div class="text-muted" style="font-size: 11px;">₹{{ "{:,.2f}".format(opp.product.price if opp.product else 120.0) }}</div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="progress flex-grow-1" style="height: 6px; background: rgba(255,255,255,0.05); width: 60px;">
+                                            <div class="progress-bar bg-success" style="width: {{ opp.recovery_probability * 100 }}%"></div>
+                                        </div>
+                                        <span class="font-mono text-white" style="font-size: 11px;">{{ (opp.recovery_probability * 100)|round(0) }}%</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge {% if opp.status == 'RECOVERED' %}badge-status-recovered{% elif opp.status == 'EMAIL_SENT' %}badge-status-sent{% else %}bg-secondary text-light{% endif %}">
+                                        {{ opp.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary-saas py-1 px-2" style="font-size: 11px;" onclick="runAgentForCustomer({{ opp.customer_id }})">
+                                        <i class="fas fa-robot"></i> Engage
+                                    </button>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">No high-priority opportunities pending.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Agent Memory Timeline -->
+    <div class="col-lg-5">
+        <div class="card-saas h-100">
+            <div class="card-header-saas">
+                <h5><i class="fas fa-stream text-primary me-2"></i>Recent Agent Decisions & Actions</h5>
+                <a href="{{ url_for('agent.agent_activity') }}" class="btn btn-secondary-saas btn-sm">Audit Log</a>
+            </div>
+            <div class="card-body-saas">
+                <div class="timeline">
+                    {% for act in recent_actions %}
+                    <div class="timeline-item">
+                        <div class="timeline-dot">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="badge bg-dark border border-secondary text-primary font-mono" style="font-size: 10px;">{{ act.action_type }}</span>
+                                <span class="timeline-time">{{ act.created_at.strftime('%I:%M %p') }}</span>
+                            </div>
+                            <div class="text-light" style="font-size: 12px; line-height: 1.5;">{{ act.reasoning }}</div>
+                            {% if act.result %}
+                            <div class="text-muted mt-1" style="font-size: 11px;"><i class="fas fa-check-circle text-success me-1"></i>Result: {{ act.result }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-muted text-center py-4">No recent agent actions recorded yet.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.chartsData = {{ charts | tojson }};
+
+    async function runGuaranteedDemoScenario() {
+        const btn = document.getElementById('btnRunDemoScenario');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Running Scenario...';
+        }
+        try {
+            const resp = await fetch('/api/demo/run-scenario', { credentials: 'same-origin' });
+            const data = await resp.json();
+            if (data.status === 'success') {
+                alert(`✅ Demo Scenario Executed!\n\nCustomer: ${data.scenario.customer}\nProduct: ${data.scenario.product} (${data.scenario.price})\nLost Sale Prob: ${(data.scenario.lost_sale_prob*100).toFixed(0)}%\nRecovery Prob: ${(data.scenario.recovery_prob*100).toFixed(0)}%\nDecision: ${data.scenario.decision}\nEmail Status: ${data.scenario.email_status}\n\nOutcome: ${data.scenario.outcome}`);
+                window.location.reload();
+            } else {
+                alert('Error running scenario: ' + (data.message || 'Unknown error'));
+            }
+        } catch (err) {
+            alert('Network error executing demo scenario: ' + err.message);
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-bolt me-1"></i>Run Demo Scenario';
+            }
+        }
+    }
+</script>
+{% endblock %}

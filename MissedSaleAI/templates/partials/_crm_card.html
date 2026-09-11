@@ -1,0 +1,89 @@
+<div class="kanban-card">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="badge 
+            {% if opp.priority == 'HIGH' %}badge-priority-high
+            {% elif opp.priority == 'MEDIUM' %}badge-priority-medium
+            {% else %}badge-priority-low{% endif %}">
+            {{ opp.priority }}
+        </span>
+        <span class="font-mono text-muted" style="font-size: 11px;">#{{ opp.id }}</span>
+    </div>
+
+    <h6 class="text-white mb-1" style="font-size: 13px; font-weight: 600;">
+        <a href="{{ url_for('customers.customer_detail', customer_id=opp.customer_id) }}" class="text-white text-decoration-none">
+            {{ opp.customer.name }}
+        </a>
+    </h6>
+    <div class="text-muted mb-2" style="font-size: 11px;">{{ opp.customer.email }}</div>
+
+    <div class="p-2 rounded mb-2" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); font-size: 12px;">
+        <div class="text-secondary d-flex justify-content-between">
+            <span>{{ opp.product.name if opp.product else 'Cart Items' }}</span>
+            <strong class="text-white">₹{{ "{:,.2f}".format(opp.product.price if opp.product else 99.0) }}</strong>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="d-flex justify-content-between text-muted mb-1" style="font-size: 11px;">
+            <span>Recovery Likelihood</span>
+            <span class="font-mono text-white">{{ (opp.recovery_probability * 100)|round(0) }}%</span>
+        </div>
+        <div class="progress" style="height: 5px; background: rgba(255,255,255,0.05);">
+            <div class="progress-bar {% if opp.recovery_probability >= 0.7 %}bg-success{% elif opp.recovery_probability >= 0.4 %}bg-warning{% else %}bg-secondary{% endif %}" 
+                 style="width: {{ opp.recovery_probability * 100 }}%"></div>
+        </div>
+    </div>
+
+    {% if opp.status == 'RECOVERED' %}
+    <div class="alert alert-success py-1 px-2 mb-2 text-center" style="font-size: 11px;">
+        <i class="fas fa-check-circle me-1"></i> Recovered ₹{{ "{:,.2f}".format(opp.recovered_amount) }}
+    </div>
+    {% elif opp.status == 'EMAIL_SENT' %}
+    <div class="alert alert-info py-1 px-2 mb-2 text-center" style="font-size: 11px; background: rgba(14, 165, 233, 0.1); border-color: rgba(14, 165, 233, 0.3); color: #38bdf8;">
+        <i class="fas fa-paper-plane me-1"></i> Recovery Email Sent
+    </div>
+    {% elif opp.status == 'EMAIL_FAILED' %}
+    <div class="alert alert-danger py-1 px-2 mb-2 text-center" style="font-size: 11px;">
+        <i class="fas fa-exclamation-triangle me-1"></i> Email Delivery Failed
+    </div>
+    {% endif %}
+
+    <div class="d-flex align-items-center justify-content-between pt-2 border-top border-dark">
+        <button class="btn btn-primary-saas py-1 px-2" style="font-size: 11px;" onclick="runAgentForCustomer({{ opp.customer_id }})">
+            <i class="fas fa-robot"></i> Run Agent
+        </button>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary-saas py-1 px-2 dropdown-toggle" style="font-size: 11px;" type="button" data-bs-toggle="dropdown">
+                Actions
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" style="font-size: 12px;">
+                <li>
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="openOpportunityEmailPreview({{ opp.id }}, '{{ opp.customer.email }}', '{{ opp.customer.name }}', '{{ opp.product.name if opp.product else 'Cart Items' }}', {{ opp.product.price if opp.product else 75000.0 }}, {{ opp.customer_id }})">
+                        <i class="fas fa-paper-plane text-info me-2"></i>Send Recovery Email
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item text-success" href="javascript:void(0)" onclick="triggerOpportunityAction({{ opp.id }}, 'MARK_RECOVERED', {{ opp.product.price if opp.product else 120.0 }})">
+                        <i class="fas fa-check-circle me-2"></i>Mark as Recovered (₹)
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form method="POST" action="{{ url_for('crm.update_status', opportunity_id=opp.id) }}" class="px-2 py-1">
+                        <label class="text-muted" style="font-size: 10px;">Change Stage:</label>
+                        <select name="status" class="form-select form-select-sm form-control-saas py-0" onchange="this.form.submit()">
+                            <option value="NEW" {% if opp.status == 'NEW' %}selected{% endif %}>NEW</option>
+                            <option value="ACTION_REQUIRED" {% if opp.status == 'ACTION_REQUIRED' %}selected{% endif %}>ACTION REQUIRED</option>
+                            <option value="EMAIL_SENT" {% if opp.status == 'EMAIL_SENT' %}selected{% endif %}>EMAIL SENT</option>
+                            <option value="FOLLOW_UP" {% if opp.status == 'FOLLOW_UP' %}selected{% endif %}>FOLLOW UP</option>
+                            <option value="RECOVERED" {% if opp.status == 'RECOVERED' %}selected{% endif %}>RECOVERED</option>
+                            <option value="CLOSED" {% if opp.status == 'CLOSED' %}selected{% endif %}>CLOSED</option>
+                            <option value="IGNORED" {% if opp.status == 'IGNORED' %}selected{% endif %}>IGNORED</option>
+                        </select>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

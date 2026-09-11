@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 950" width="100%" height="100%" style="background:#0b1120; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+    <linearGradient id="purple-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="amber-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#818cf8" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24" />
+    </marker>
+  </defs>
+
+  <!-- Header Card -->
+  <rect x="50" y="25" width="1000" height="75" rx="14" fill="#1e293b" stroke="#334155" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="80" y="60" fill="#f8fafc" font-size="22" font-weight="800" letter-spacing="-0.5">AGENTIC AI ARCHITECTURE &amp; AUTONOMOUS RECOVERY LOOP</text>
+  <text x="80" y="82" fill="#94a3b8" font-size="13">Perception ➔ Prediction ➔ Multi-Factor Reasoning ➔ Tool Execution ➔ Outcome Adaptation</text>
+  <rect x="870" y="42" width="155" height="34" rx="17" fill="#6366f1" />
+  <text x="947" y="64" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">AGENTIC AI LOOP</text>
+
+  <!-- Stage 1: Customer Events -->
+  <rect x="375" y="125" width="350" height="60" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow)" />
+  <circle cx="410" cy="155" r="16" fill="#0284c7" />
+  <text x="410" y="160" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">1</text>
+  <text x="440" y="152" fill="#ffffff" font-size="15" font-weight="700">Real-Time Customer Events</text>
+  <text x="440" y="169" fill="#94a3b8" font-size="12">Page views • Cart additions • Drop-offs • Time elapsed</text>
+
+  <!-- Flow 1 to 2 -->
+  <path d="M 550 185 L 550 215" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Stage 2: Observation Layer -->
+  <rect x="375" y="215" width="350" height="60" rx="10" fill="#1e293b" stroke="#60a5fa" stroke-width="1.5" filter="url(#shadow)" />
+  <circle cx="410" cy="245" r="16" fill="#2563eb" />
+  <text x="410" y="250" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">2</text>
+  <text x="440" y="242" fill="#ffffff" font-size="15" font-weight="700">Observation &amp; Perception Layer</text>
+  <text x="440" y="259" fill="#94a3b8" font-size="12">Session Duration: 320s • Intent Signals Harvested</text>
+
+  <!-- Flow 2 to 3 -->
+  <path d="M 550 275 L 550 305" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Stage 3: Data & Agent Memory -->
+  <rect x="325" y="305" width="450" height="64" rx="10" fill="#1e293b" stroke="#8b5cf6" stroke-width="1.5" filter="url(#shadow)" />
+  <circle cx="360" cy="337" r="16" fill="#7c3aed" />
+  <text x="360" y="342" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">3</text>
+  <text x="390" y="332" fill="#ffffff" font-size="15" font-weight="700">Persistent Data &amp; Agent Memory</text>
+  <text x="390" y="352" fill="#c4b5fd" font-size="12">PostgreSQL: Prior orders (3) • Contact fatigue • Past responses</text>
+
+  <!-- Flow 3 to 4 -->
+  <path d="M 550 369 L 550 399" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Stage 4: ML Prediction -->
+  <rect x="325" y="399" width="450" height="70" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow)" />
+  <circle cx="360" cy="434" r="16" fill="#d97706" />
+  <text x="360" y="439" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">4</text>
+  <text x="390" y="427" fill="#fbbf24" font-size="15" font-weight="700">ML Prediction Engine (Random Forest)</text>
+  <text x="390" y="448" fill="#e2e8f0" font-size="12">Lost-Sale Probability: 91% | Recovery Probability: 84%</text>
+
+  <!-- Flow 4 to 5 -->
+  <path d="M 550 469 L 550 499" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Stage 5: Agent Reasoning & Decision -->
+  <rect x="250" y="499" width="600" height="85" rx="12" fill="#1e293b" stroke="#a855f7" stroke-width="2" filter="url(#shadow)" />
+  <circle cx="290" cy="541" r="18" fill="#9333ea" />
+  <text x="290" y="547" fill="#ffffff" font-size="15" font-weight="bold" text-anchor="middle">5</text>
+  <text x="325" y="530" fill="#ffffff" font-size="16" font-weight="700">Agent Multi-Factor Reasoning &amp; Decision Engine</text>
+  <text x="325" y="550" fill="#e2e8f0" font-size="12">Evaluates: CLV (High Tier) + Cart Intent + Fatigue (0/2 attempts) + Margin</text>
+  <text x="325" y="568" fill="#38bdf8" font-size="12" font-weight="600">Decision Outcome: HIGH PRIORITY ➔ Execute Automated Recovery Outreach</text>
+
+  <!-- Flow 5 to 6 Split -->
+  <path d="M 430 584 L 430 625 L 340 625 L 340 650" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow)" fill="none" />
+  <path d="M 670 584 L 670 625 L 760 625 L 760 650" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow)" fill="none" />
+
+  <!-- Action Tool Choice Cards -->
+  <!-- Tool 1: CRM Tool -->
+  <rect x="200" y="650" width="280" height="90" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="340" y="682" fill="#60a5fa" font-size="15" font-weight="700" text-anchor="middle">CRM Tool Execution</text>
+  <text x="340" y="703" fill="#cbd5e1" font-size="11" text-anchor="middle">• Create Opportunity #104 (HIGH)</text>
+  <text x="340" y="721" fill="#94a3b8" font-size="11" text-anchor="middle">• Pipeline Status ➔ ACTION_REQUIRED</text>
+
+  <!-- Tool 2: Resend Email Tool -->
+  <rect x="620" y="650" width="280" height="90" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="760" y="682" fill="#34d399" font-size="15" font-weight="700" text-anchor="middle">Resend Email Tool Execution</text>
+  <text x="760" y="703" fill="#cbd5e1" font-size="11" text-anchor="middle">• Template 2: Checkout Abandonment</text>
+  <text x="760" y="721" fill="#94a3b8" font-size="11" text-anchor="middle">• Dispatched to Rahul (₹75,000 laptop)</text>
+
+  <!-- Flow down to Feedback & Monitoring -->
+  <path d="M 340 740 L 340 775 L 500 775 L 500 805" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow)" fill="none" />
+  <path d="M 760 740 L 760 775 L 600 775 L 600 805" stroke="#818cf8" stroke-width="2.5" marker-end="url(#arrow)" fill="none" />
+
+  <!-- Stage 6: Outcome Monitoring & Verification -->
+  <rect x="300" y="805" width="500" height="65" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)" />
+  <circle cx="335" cy="837" r="16" fill="#059669" />
+  <text x="335" y="842" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">6</text>
+  <text x="365" y="830" fill="#34d399" font-size="15" font-weight="700">Outcome Monitoring &amp; Event Feedback</text>
+  <text x="365" y="851" fill="#cbd5e1" font-size="12">Customer resumes checkout ➔ Completed Purchase of ₹75,000 verified</text>
+
+  <!-- Flow back to Adaptation Loop -->
+  <path d="M 800 837 L 960 837 L 960 434 L 775 434" stroke="#34d399" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow-green)" fill="none" />
+  <rect x="910" y="615" width="105" height="42" rx="6" fill="#065f46" stroke="#10b981" />
+  <text x="962" y="633" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">7. ADAPTATION</text>
+  <text x="962" y="647" fill="#a7f3d0" font-size="9" text-anchor="middle">Loop Terminated</text>
+</svg>

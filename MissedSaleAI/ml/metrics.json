@@ -1,0 +1,68 @@
+{
+  "dataset_samples": 1200,
+  "test_samples": 300,
+  "baseline_logistic_regression": {
+    "name": "Logistic Regression (Baseline)",
+    "accuracy": 0.81,
+    "precision": 0.8095,
+    "recall": 0.9958,
+    "f1_score": 0.8931,
+    "confusion_matrix": [
+      [
+        5,
+        56
+      ],
+      [
+        1,
+        238
+      ]
+    ]
+  },
+  "champion_random_forest": {
+    "name": "Random Forest (Champion)",
+    "accuracy": 0.7967,
+    "precision": 0.8069,
+    "recall": 0.9791,
+    "f1_score": 0.8847,
+    "confusion_matrix": [
+      [
+        5,
+        56
+      ],
+      [
+        5,
+        234
+      ]
+    ]
+  },
+  "recovery_model": {
+    "name": "Recovery Predictor (Random Forest)",
+    "accuracy": 0.6633,
+    "precision": 0.6682,
+    "recall": 0.84,
+    "f1_score": 0.7443,
+    "confusion_matrix": [
+      [
+        52,
+        73
+      ],
+      [
+        28,
+        147
+      ]
+    ]
+  },
+  "feature_importances": {
+    "checkout_started": 0.1237,
+    "session_duration": 0.121,
+    "cart_additions": 0.119,
+    "email_engagement": 0.118,
+    "average_order_value": 0.1179,
+    "days_since_last_activity": 0.1117,
+    "product_views": 0.0997,
+    "previous_purchases": 0.0784,
+    "number_of_visits": 0.0672,
+    "customer_value_score": 0.0275,
+    "discount_used": 0.016
+  }
+}

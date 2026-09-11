@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Recovery Opportunities – MissedSale AI{% endblock %}
+{% block page_heading %}Recovery Opportunities Pipeline{% endblock %}
+
+{% block content %}
+<div class="card-saas mb-4">
+    <div class="card-body-saas p-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h4 class="text-white mb-1 font-weight-bold"><i class="fas fa-bullseye text-primary me-2"></i>Active Recovery Opportunities</h4>
+                <p class="text-muted mb-0" style="font-size: 13px;">
+                    Ranked by ML recovery probability and customer value tiers with automated outreach status.
+                </p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-primary-saas" onclick="openSendEmailModal()" id="btnOppSendEmail">
+                    <i class="fas fa-plus me-1"></i> Send Recovery Email
+                </button>
+                <a href="{{ url_for('crm.crm_view') }}" class="btn btn-secondary-saas">
+                    <i class="fas fa-columns me-1"></i> Kanban Board
+                </a>
+                <button class="btn btn-secondary-saas" onclick="runBatchAgent(5)">
+                    <i class="fas fa-play-circle me-1"></i> Run Batch Recovery
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Opportunities Table -->
+<div class="card-saas">
+    <div class="card-header-saas">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <h5 class="mb-0">All Opportunities</h5>
+            <span class="badge bg-dark border border-secondary text-secondary font-mono">{{ opportunities|length }} Records</span>
+        </div>
+    </div>
+    <div class="card-body-saas p-0">
+        <div class="table-responsive">
+            <table class="table-saas mb-0">
+                <thead>
+                    <tr>
+                        <th>Opp ID</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Recovery Probability</th>
+                        <th>Priority</th>
+                        <th>Agent Recommendation</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for opp in opportunities %}
+                    <tr>
+                        <td class="font-mono text-muted">#OPP-{{ opp.id }}</td>
+                        <td>
+                            <a href="{{ url_for('customers.customer_detail', customer_id=opp.customer_id) }}" class="text-white text-decoration-none fw-bold">
+                                {{ opp.customer.name }}
+                            </a>
+                            <div class="text-muted" style="font-size: 11px;">{{ opp.customer.customer_value }} Tier</div>
+                        </td>
+                        <td>
+                            <strong>{{ opp.product.name if opp.product else 'Cart Items' }}</strong>
+                            <div class="text-muted" style="font-size: 11px;">₹{{ "{:,.2f}".format(opp.product.price if opp.product else 99.0) }}</div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="progress flex-grow-1" style="height: 6px; background: rgba(255,255,255,0.05); width: 60px;">
+                                    <div class="progress-bar {% if opp.recovery_probability >= 0.7 %}bg-success{% elif opp.recovery_probability >= 0.4 %}bg-warning{% else %}bg-secondary{% endif %}" 
+                                         style="width: {{ opp.recovery_probability * 100 }}%"></div>
+                                </div>
+                                <span class="font-mono text-white" style="font-size: 11px;">{{ (opp.recovery_probability * 100)|round(0) }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge 
+                                {% if opp.priority == 'HIGH' %}badge-priority-high
+                                {% elif opp.priority == 'MEDIUM' %}badge-priority-medium
+                                {% else %}badge-priority-low{% endif %}">
+                                {{ opp.priority }}
+                            </span>
+                        </td>
+                        <td>
+                            <code class="text-accent" style="font-size: 11px;">{{ opp.recommended_action }}</code>
+                        </td>
+                        <td>
+                            <span class="badge {% if opp.status == 'RECOVERED' %}badge-status-recovered{% elif opp.status == 'EMAIL_SENT' %}badge-status-sent{% else %}bg-secondary text-white{% endif %}">
+                                {{ opp.status }}
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <div class="d-flex align-items-center justify-content-end gap-2">
+                                <button class="btn btn-primary-saas py-1 px-2" style="font-size: 11px;" onclick="runAgentForCustomer({{ opp.customer_id }})">
+                                    <i class="fas fa-robot"></i> Engage
+                                </button>
+                                <button class="btn btn-secondary-saas py-1 px-2" style="font-size: 11px;" title="Send Recovery Email" onclick="openOpportunityEmailPreview({{ opp.id }}, '{{ opp.customer.email }}', '{{ opp.customer.name }}', '{{ opp.product.name if opp.product else 'Cart Items' }}', {{ opp.product.price if opp.product else 75000.0 }}, {{ opp.customer_id }})">
+                                    <i class="fas fa-envelope text-info"></i>
+                                </button>
+                                <button class="btn btn-secondary-saas py-1 px-2 text-success" style="font-size: 11px;" onclick="triggerOpportunityAction({{ opp.id }}, 'MARK_RECOVERED', {{ opp.product.price if opp.product else 120.0 }})">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-5">No opportunities recorded.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

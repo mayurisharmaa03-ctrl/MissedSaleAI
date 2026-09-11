@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 950" width="100%" height="100%" style="background:#0b1120; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+    <marker id="seq-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+    <marker id="seq-arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+    </marker>
+    <marker id="seq-arrow-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#a78bfa" />
+    </marker>
+  </defs>
+
+  <!-- Title Header -->
+  <rect x="50" y="25" width="1100" height="70" rx="14" fill="#1e293b" stroke="#334155" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="80" y="60" fill="#f8fafc" font-size="22" font-weight="800" letter-spacing="-0.5">MissedSale AI – End-to-End Recovery Sequence Flow</text>
+  <text x="80" y="80" fill="#94a3b8" font-size="13">Detailed 12-Step Interaction Flow Across Customer, Backend, ML, Agent &amp; Resend</text>
+  <rect x="980" y="42" width="145" height="34" rx="17" fill="#0284c7" />
+  <text x="1052" y="64" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">SEQUENCE FLOW</text>
+
+  <!-- Lifeline Actors / Systems (Columns) -->
+  <!-- 1. Customer (X: 110) -->
+  <rect x="50" y="125" width="120" height="42" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="110" y="151" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">Customer</text>
+  <line x1="110" y1="167" x2="110" y2="900" stroke="#334155" stroke-width="1.5" stroke-dasharray="5,5" />
+
+  <!-- 2. Storefront (X: 250) -->
+  <rect x="190" y="125" width="120" height="42" rx="8" fill="#1e293b" stroke="#60a5fa" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="250" y="151" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">Storefront</text>
+  <line x1="250" y1="167" x2="250" y2="900" stroke="#334155" stroke-width="1.5" stroke-dasharray="5,5" />
+
+  <!-- 3. Flask Server (X: 390) -->
+  <rect x="330" y="125" width="120" height="42" rx="8" fill="#1e293b" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="390" y="151" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">Flask Backend</text>
+  <line x1="390" y1="167" x2="390" y2="900" stroke="#334155" stroke-width="1.5" stroke-dasharray="5,5" />
+
+  <!-- 4. PostgreSQL (X: 530) -->
+  <rect x="470" y="125" width="120" height="42" rx="8" fill="#1e293b" stroke="#0284c7" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="530" y="151" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">PostgreSQL</text>
+  <line x1="530" y1="167" x2="530" y2="900" stroke="#334155" stroke-width="1.5" stroke-dasharray="5,5" />
+
+  <!-- 5. ML Engine (X: 680) -->
+  <rect x="620" y="125" width="120" height="42" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="680" y="151" fill="#fbbf24" font-size="13" font-weight="700" text-anchor="middle">ML Engine</text>
+  <line x1="680" y1="167" x2="680" y2="900" stroke="#334155" stroke-width="1.5" stroke-dasharray="5,5" />
+
+  <!-- 6. Recovery Agent (X: 830) -->
+  <rect x="760" y="125" width="140" height="42" rx="8" fill="#1e293b" stroke="#8b5cf6" stroke-width="2" filter="url(#shadow)" />
+  <text x="830" y="151" fill="#c084fc" font-size="13" font-weight="700" text-anchor="middle">Recovery Agent</text>
+  <line x1="830" y1="167" x2="830" y2="900" stroke="#334155" stroke-width="1.5" stroke-dasharray="5,5" />
+
+  <!-- 7. CRM / Tools (X: 980) -->
+  <rect x="920" y="125" width="120" height="42" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="980" y="151" fill="#93c5fd" font-size="13" font-weight="700" text-anchor="middle">CRM &amp; Tools</text>
+  <line x1="980" y1="167" x2="980" y2="900" stroke="#334155" stroke-width="1.5" stroke-dasharray="5,5" />
+
+  <!-- 8. Resend API (X: 1110) -->
+  <rect x="1050" y="125" width="120" height="42" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="1110" y="151" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle">Resend API</text>
+  <line x1="1110" y1="167" x2="1110" y2="900" stroke="#334155" stroke-width="1.5" stroke-dasharray="5,5" />
+
+  <!-- Step 1: Customer abandons cart (110 -> 250) -->
+  <line x1="110" y1="200" x2="250" y2="200" stroke="#38bdf8" stroke-width="2" marker-end="url(#seq-arrow)" />
+  <text x="180" y="192" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">1. Abandons cart (₹75,000)</text>
+
+  <!-- Step 2: Storefront logs behavior to Flask (250 -> 390) -->
+  <line x1="250" y1="240" x2="390" y2="240" stroke="#60a5fa" stroke-width="2" marker-end="url(#seq-arrow)" />
+  <text x="320" y="232" fill="#cbd5e1" font-size="11" text-anchor="middle">2. POST /api/behavior</text>
+
+  <!-- Step 3: Flask persists to PostgreSQL (390 -> 530) -->
+  <line x1="390" y1="280" x2="530" y2="280" stroke="#0284c7" stroke-width="2" marker-end="url(#seq-arrow)" />
+  <text x="460" y="272" fill="#cbd5e1" font-size="11" text-anchor="middle">3. Save CustomerBehavior</text>
+
+  <!-- Step 4: Agent observes & queries DB history (830 -> 530) -->
+  <line x1="830" y1="330" x2="530" y2="330" stroke="#a78bfa" stroke-width="2" marker-end="url(#seq-arrow-purple)" />
+  <text x="680" y="322" fill="#c4b5fd" font-size="11" font-weight="600" text-anchor="middle">4. OBSERVE: Fetch history &amp; fatigue count</text>
+
+  <!-- Step 5: Agent invokes ML Engine (830 -> 680) -->
+  <line x1="830" y1="380" x2="680" y2="380" stroke="#fbbf24" stroke-width="2" marker-end="url(#seq-arrow)" />
+  <text x="755" y="372" fill="#fde68a" font-size="11" font-weight="600" text-anchor="middle">5. ANALYZE: Predict lost &amp; recovery prob</text>
+
+  <!-- ML Return (680 -> 830) -->
+  <line x1="680" y1="410" x2="830" y2="410" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#seq-arrow)" />
+  <text x="755" y="404" fill="#cbd5e1" font-size="10" text-anchor="middle">Returns: Lost 91%, Recovery 84%</text>
+
+  <!-- Step 6: Agent Reasons & Decides (Self loop at 830) -->
+  <path d="M 830 440 C 880 440, 880 475, 830 475" stroke="#c084fc" stroke-width="2" fill="none" marker-end="url(#seq-arrow-purple)" />
+  <text x="910" y="455" fill="#e9d5ff" font-size="11" font-weight="700">6. REASON &amp; DECIDE</text>
+  <text x="910" y="470" fill="#cbd5e1" font-size="10">VIP tier + no fatigue ➔ HIGH PRIORITY</text>
+
+  <!-- Step 7: Agent calls CRM Tool (830 -> 980) -->
+  <line x1="830" y1="510" x2="980" y2="510" stroke="#38bdf8" stroke-width="2" marker-end="url(#seq-arrow)" />
+  <text x="905" y="502" fill="#93c5fd" font-size="11" font-weight="600" text-anchor="middle">7. ACT: Create Opportunity #104</text>
+
+  <!-- Step 8: CRM updates DB (980 -> 530) -->
+  <line x1="980" y1="545" x2="530" y2="545" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#seq-arrow)" />
+  <text x="755" y="538" fill="#94a3b8" font-size="10" text-anchor="middle">Persist opportunity &amp; decision in memory</text>
+
+  <!-- Step 9: Agent generates email & calls Resend (830 -> 1110) -->
+  <line x1="830" y1="590" x2="1110" y2="590" stroke="#34d399" stroke-width="2" marker-end="url(#seq-arrow-green)" />
+  <text x="970" y="582" fill="#6ee7b7" font-size="11" font-weight="600" text-anchor="middle">8. ACT: Dispatch Template 2 via Resend API</text>
+
+  <!-- Step 10: Resend sends email to Customer (1110 -> 110) -->
+  <path d="M 1110 635 L 110 635" stroke="#34d399" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#seq-arrow-green)" />
+  <text x="610" y="627" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">9. Personalized Recovery Email Delivered to Rahul</text>
+
+  <!-- Step 11: Customer clicks link and completes purchase (110 -> 250) -->
+  <line x1="110" y1="695" x2="250" y2="695" stroke="#38bdf8" stroke-width="2" marker-end="url(#seq-arrow)" />
+  <text x="180" y="687" fill="#38bdf8" font-size="11" font-weight="600" text-anchor="middle">10. Resumes checkout &amp; pays ₹75,000</text>
+
+  <!-- Step 12: Storefront notifies backend (250 -> 390 -> 530) -->
+  <line x1="250" y1="735" x2="390" y2="735" stroke="#60a5fa" stroke-width="2" marker-end="url(#seq-arrow)" />
+  <text x="320" y="727" fill="#cbd5e1" font-size="11" text-anchor="middle">11. POST /api/sales (COMPLETED)</text>
+  <line x1="390" y1="755" x2="530" y2="755" stroke="#0284c7" stroke-width="2" marker-end="url(#seq-arrow)" />
+  <text x="460" y="747" fill="#cbd5e1" font-size="10" text-anchor="middle">Record Sale ₹75,000</text>
+
+  <!-- Step 13: Agent Monitors & Adapts (830 -> 530) -->
+  <line x1="830" y1="810" x2="530" y2="810" stroke="#34d399" stroke-width="2" marker-end="url(#seq-arrow-green)" />
+  <text x="680" y="802" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">12. MONITOR &amp; ADAPT: Mark RECOVERED &amp; Halt Further Outreach</text>
+
+  <!-- Agent Adaptation Memory Stamp (Self loop at 830) -->
+  <path d="M 830 840 C 880 840, 880 875, 830 875" stroke="#34d399" stroke-width="2" fill="none" marker-end="url(#seq-arrow-green)" />
+  <text x="910" y="855" fill="#6ee7b7" font-size="11" font-weight="700">POLICY ADAPTED</text>
+  <text x="910" y="870" fill="#a7f3d0" font-size="10">Success stored in Agent Memory</text>
+</svg>

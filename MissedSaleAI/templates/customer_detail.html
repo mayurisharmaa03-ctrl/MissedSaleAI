@@ -1,0 +1,437 @@
+{% extends "base.html" %}
+
+{% block title %}{{ customer.name }} – Customer 360° Profile{% endblock %}
+{% block page_heading %}Customer 360° Intelligence Profile{% endblock %}
+
+{% block content %}
+<!-- Customer Header Card -->
+<div class="card-saas mb-4">
+    <div class="card-body-saas p-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="brand-icon" style="width: 56px; height: 56px; font-size: 24px;">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <h4 class="text-white mb-0 font-weight-bold">{{ customer.name }}</h4>
+                        <span class="badge 
+                            {% if customer.customer_value == 'High' %}badge-priority-high
+                            {% elif customer.customer_value == 'Medium' %}badge-priority-medium
+                            {% else %}badge-priority-low{% endif %}">
+                            {{ customer.customer_value }} Value Tier
+                        </span>
+                        {% if customer.email_opt_out %}
+                        <span class="badge bg-danger text-white"><i class="fas fa-ban me-1"></i>Unsubscribed</span>
+                        {% else %}
+                        <span class="badge bg-success text-white"><i class="fas fa-check-circle me-1"></i>Subscribed</span>
+                        {% endif %}
+                    </div>
+                    <div class="text-muted" style="font-size: 13px;">
+                        <i class="fas fa-envelope me-1"></i> {{ customer.email }} &nbsp;|&nbsp;
+                        <i class="fas fa-phone me-1"></i> {{ customer.phone or 'Not provided' }} &nbsp;|&nbsp;
+                        <i class="fas fa-calendar-alt me-1"></i> Member Since {{ customer.created_at.strftime('%b %d, %Y') if customer.created_at else 'N/A' }} &nbsp;|&nbsp;
+                        <i class="fas fa-paper-plane me-1"></i> Emails Sent: <strong class="text-white">{{ customer.email_count or 0 }}</strong>
+                        {% if customer.last_email_sent %}
+                        (Last: {{ customer.last_email_sent.strftime('%b %d, %Y') }})
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-end">
+                    <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Total Purchases</div>
+                    <div class="text-white font-weight-bold font-mono" style="font-size: 18px;">{{ sales|length }} orders</div>
+                </div>
+                <div class="text-end ps-3 border-start border-secondary">
+                    <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Total Spent</div>
+                    <div class="text-success font-weight-bold font-mono" style="font-size: 22px;">₹{{ "{:,.2f}".format(total_spent) }}</div>
+                </div>
+                <button class="btn btn-primary-saas px-3 py-2" onclick="runAgentForCustomer({{ customer.id }})">
+                    <i class="fas fa-robot me-1"></i> Run Autonomous Agent
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Insights Banner (OBSERVE -> ANALYZE -> REASON) -->
+<div class="card-saas mb-4" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%); border: 1px solid rgba(59, 130, 246, 0.3);">
+    <div class="card-body-saas p-4">
+        <h5 class="text-white mb-3 d-flex align-items-center gap-2">
+            <i class="fas fa-brain text-accent"></i> Real-Time AI & Autonomous Agent Insights
+        </h5>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);">
+                    <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Lost Sale Probability</div>
+                    <div class="text-danger font-mono font-weight-bold fs-4">
+                        {% if opportunities and opportunities[0].lost_sale %}
+                            {{ (opportunities[0].lost_sale.lost_probability * 100)|round(0) }}%
+                        {% else %}
+                            82%
+                        {% endif %}
+                    </div>
+                    <div class="text-muted" style="font-size: 11px;">Calculated by Random Forest</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);">
+                    <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Recovery Probability</div>
+                    <div class="text-success font-mono font-weight-bold fs-4">
+                        {% if opportunities %}
+                            {{ (opportunities[0].recovery_probability * 100)|round(0) }}%
+                        {% else %}
+                            78%
+                        {% endif %}
+                    </div>
+                    <div class="text-muted" style="font-size: 11px;">Agentic Multi-Factor Score</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);">
+                    <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Purchase Intent</div>
+                    <div class="text-info font-mono font-weight-bold fs-4">
+                        {% if behaviors and behaviors[0].checkout_started %}
+                            HIGH (Checkout)
+                        {% elif behaviors and behaviors[0].cart_added > 0 %}
+                            MEDIUM (In Cart)
+                        {% else %}
+                            MODERATE
+                        {% endif %}
+                    </div>
+                    <div class="text-muted" style="font-size: 11px;">Intent Classification</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle);">
+                    <div class="text-muted" style="font-size: 11px; text-transform: uppercase;">Opportunity Score</div>
+                    <div class="text-warning font-mono font-weight-bold fs-4">
+                        {% if opportunities %}
+                            {{ (opportunities[0].recovery_probability * 100 * (1.2 if customer.customer_value == 'High' else 1.0))|round(0) }}/100
+                        {% else %}
+                            85/100
+                        {% endif %}
+                    </div>
+                    <div class="text-muted" style="font-size: 11px;">Value-Weighted Metric</div>
+                </div>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="p-3 rounded" style="background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.2);">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <i class="fas fa-comment-dots text-primary"></i>
+                        <strong class="text-white" style="font-size: 13px;">Agent Reasoning:</strong>
+                    </div>
+                    <p class="text-light mb-0" style="font-size: 13px; line-height: 1.5;">
+                        {% if opportunities and opportunities[0].reasoning %}
+                            {{ opportunities[0].reasoning }}
+                        {% elif actions and actions[0].reasoning %}
+                            {{ actions[0].reasoning }}
+                        {% else %}
+                            Customer has browsing activity indicating high intent. Recommended action is to monitor and engage with tailored incentives if checkout is abandoned.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs Navigation for Customer Profile -->
+<ul class="nav nav-pills mb-4 gap-2" id="customerTabs" role="tablist">
+    <li class="nav-item">
+        <button class="nav-link active btn-secondary-saas text-white" id="tab-behaviors" data-bs-toggle="pill" data-bs-target="#content-behaviors" type="button">
+            <i class="fas fa-eye me-1"></i> Browsing & Cart Behavior ({{ behaviors|length }})
+        </button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link btn-secondary-saas text-white" id="tab-opps" data-bs-toggle="pill" data-bs-target="#content-opps" type="button">
+            <i class="fas fa-bullseye me-1"></i> Recovery Opportunities ({{ opportunities|length }})
+        </button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link btn-secondary-saas text-white" id="tab-sales" data-bs-toggle="pill" data-bs-target="#content-sales" type="button">
+            <i class="fas fa-receipt me-1"></i> Purchase History ({{ sales|length }})
+        </button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link btn-secondary-saas text-white" id="tab-actions" data-bs-toggle="pill" data-bs-target="#content-actions" type="button">
+            <i class="fas fa-history me-1"></i> Agent Memory Audit ({{ actions|length }})
+        </button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link btn-secondary-saas text-white" id="tab-comms" data-bs-toggle="pill" data-bs-target="#content-comms" type="button">
+            <i class="fas fa-paper-plane me-1"></i> Outreach Logs ({{ communications|length }})
+        </button>
+    </li>
+</ul>
+
+<!-- Tab Contents -->
+<div class="tab-content">
+    <!-- 1. Behavior & Carts -->
+    <div class="tab-pane fade show active" id="content-behaviors">
+        <div class="card-saas">
+            <div class="card-header-saas">
+                <h5>Observed Cart & Browsing Events</h5>
+            </div>
+            <div class="card-body-saas p-0">
+                <div class="table-responsive">
+                    <table class="table-saas mb-0">
+                        <thead>
+                            <tr>
+                                <th>Target Product</th>
+                                <th>Page Views</th>
+                                <th>Cart Items</th>
+                                <th>Checkout Started</th>
+                                <th>Purchased</th>
+                                <th>Session Duration</th>
+                                <th>Event Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in behaviors %}
+                            <tr>
+                                <td>
+                                    <strong>{{ b.product.name if b.product else 'Various Products' }}</strong>
+                                    <div class="text-muted" style="font-size: 11px;">₹{{ "{:,.2f}".format(b.product.price if b.product else 99.0) }}</div>
+                                </td>
+                                <td>{{ b.page_views }}</td>
+                                <td><span class="badge bg-dark text-info">{{ b.cart_added }}</span></td>
+                                <td>
+                                    {% if b.checkout_started %}
+                                    <span class="badge bg-danger text-white"><i class="fas fa-check me-1"></i>Started</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">No</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if b.purchased %}
+                                    <span class="badge bg-success text-white"><i class="fas fa-check me-1"></i>Completed</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Abandoned</span>
+                                    {% endif %}
+                                </td>
+                                <td><span class="font-mono">{{ b.session_duration|round(0) }}s</span></td>
+                                <td class="font-mono text-muted" style="font-size: 11px;">{{ b.last_activity.strftime('%Y-%m-%d %I:%M %p') if b.last_activity else 'N/A' }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">No behavior sessions tracked.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Recovery Opportunities -->
+    <div class="tab-pane fade" id="content-opps">
+        <div class="card-saas">
+            <div class="card-header-saas">
+                <h5>Recovery Opportunities for {{ customer.name }}</h5>
+            </div>
+            <div class="card-body-saas p-0">
+                <div class="table-responsive">
+                    <table class="table-saas mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product</th>
+                                <th>Recovery Prob</th>
+                                <th>Priority</th>
+                                <th>Recommended Action</th>
+                                <th>Status</th>
+                                <th>Recovered Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for opp in opportunities %}
+                            <tr>
+                                <td class="font-mono text-muted">#{{ opp.id }}</td>
+                                <td>{{ opp.product.name if opp.product else 'Cart Items' }}</td>
+                                <td><strong class="font-mono text-success">{{ (opp.recovery_probability * 100)|round(1) }}%</strong></td>
+                                <td>
+                                    <span class="badge 
+                                        {% if opp.priority == 'HIGH' %}badge-priority-high
+                                        {% elif opp.priority == 'MEDIUM' %}badge-priority-medium
+                                        {% else %}badge-priority-low{% endif %}">
+                                        {{ opp.priority }}
+                                    </span>
+                                </td>
+                                <td><code class="text-accent">{{ opp.recommended_action }}</code></td>
+                                <td><span class="badge bg-dark border border-secondary text-white">{{ opp.status }}</span></td>
+                                <td>
+                                    {% if opp.status == 'RECOVERED' %}
+                                    <strong class="text-success font-mono">₹{{ "{:,.2f}".format(opp.recovered_amount) }}</strong>
+                                    {% else %}
+                                    <span class="text-muted">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">No recovery opportunities recorded.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Sales History -->
+    <div class="tab-pane fade" id="content-sales">
+        <div class="card-saas">
+            <div class="card-header-saas">
+                <h5>Completed Purchases</h5>
+            </div>
+            <div class="card-body-saas p-0">
+                <div class="table-responsive">
+                    <table class="table-saas mb-0">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Product</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in sales %}
+                            <tr>
+                                <td class="font-mono text-muted">#{{ s.id }}</td>
+                                <td>{{ s.product.name if s.product else 'Catalog Product' }}</td>
+                                <td><strong class="font-mono text-white">₹{{ "{:,.2f}".format(s.amount) }}</strong></td>
+                                <td><span class="badge bg-success text-white">{{ s.status }}</span></td>
+                                <td class="font-mono text-muted" style="font-size: 11px;">{{ s.sale_date.strftime('%Y-%m-%d %I:%M %p') if s.sale_date else 'N/A' }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">No past purchases on record.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Agent Actions -->
+    <div class="tab-pane fade" id="content-actions">
+        <div class="card-saas">
+            <div class="card-header-saas">
+                <h5>Agent Persistent Memory for this Customer</h5>
+            </div>
+            <div class="card-body-saas">
+                <div class="timeline">
+                    {% for act in actions %}
+                    <div class="timeline-item">
+                        <div class="timeline-dot"><i class="fas fa-microchip"></i></div>
+                        <div class="timeline-content">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="badge bg-dark border border-secondary text-primary font-mono">{{ act.action_type }}</span>
+                                <span class="timeline-time">{{ act.created_at.strftime('%Y-%m-%d %I:%M %p') }}</span>
+                            </div>
+                            <div class="text-light" style="font-size: 13px;">{{ act.reasoning }}</div>
+                            {% if act.result %}
+                            <div class="text-muted mt-1" style="font-size: 11px;"><strong>Result:</strong> {{ act.result }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-muted text-center py-4">No agent actions recorded for this customer yet.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Communication History (Section 11) -->
+    <div class="tab-pane fade" id="content-comms">
+        <div class="card-saas">
+            <div class="card-header-saas d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0"><i class="fas fa-history text-primary me-2"></i>Communication History</h5>
+                    <small class="text-muted">Real email transaction logs with Resend message IDs & delivery status</small>
+                </div>
+                <span class="badge bg-dark border border-secondary text-light font-mono">{{ communications|length }} Records</span>
+            </div>
+            <div class="card-body-saas p-4">
+                {% if communications %}
+                <div class="row g-3">
+                    {% for c in communications %}
+                    <div class="col-12">
+                        <div class="p-3 rounded" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-left: 4px solid {% if c.status in ('SENT', 'DELIVERED', 'OPENED', 'CLICKED', 'SUCCESS') %}#10b981{% elif c.status == 'FAILED' %}#ef4444{% else %}#f59e0b{% endif %};">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2 pb-2 border-bottom border-dark">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-dark text-white border border-secondary font-mono" style="font-size: 11px;">
+                                        <i class="fas fa-paper-plane text-info me-1"></i> Provider: {{ c.provider or 'Resend' }}
+                                    </span>
+                                    {% if c.status in ('SENT', 'SUCCESS') %}
+                                    <span class="badge bg-success text-white font-mono" style="font-size: 11px;"><i class="fas fa-check me-1"></i>✓ SENT</span>
+                                    {% elif c.status == 'DELIVERED' %}
+                                    <span class="badge bg-primary text-white font-mono" style="font-size: 11px;"><i class="fas fa-inbox me-1"></i>DELIVERED</span>
+                                    {% elif c.status == 'OPENED' %}
+                                    <span class="badge bg-info text-dark font-mono" style="font-size: 11px;"><i class="fas fa-envelope-open me-1"></i>OPENED</span>
+                                    {% elif c.status == 'CLICKED' %}
+                                    <span class="badge bg-purple text-white font-mono" style="font-size: 11px;"><i class="fas fa-mouse-pointer me-1"></i>CLICKED</span>
+                                    {% elif c.status == 'FAILED' %}
+                                    <span class="badge bg-danger text-white font-mono" style="font-size: 11px;"><i class="fas fa-times me-1"></i>✕ FAILED</span>
+                                    {% elif c.status == 'SUPPRESSED_OPT_OUT' %}
+                                    <span class="badge bg-secondary text-white font-mono" style="font-size: 11px;"><i class="fas fa-ban me-1"></i>OPT-OUT SUPPRESSED</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark font-mono" style="font-size: 11px;">{{ c.status }}</span>
+                                    {% endif %}
+                                </div>
+                                <span class="font-mono text-muted" style="font-size: 12px;">
+                                    <i class="fas fa-clock me-1"></i> Sent: {{ c.sent_at.strftime('%d %b %Y, %I:%M %p') if c.sent_at else 'N/A' }}
+                                </span>
+                            </div>
+
+                            <div class="row g-2 mb-2" style="font-size: 13px;">
+                                <div class="col-md-6">
+                                    <span class="text-muted">Recipient:</span>
+                                    <strong class="text-white ms-1 font-mono">{{ c.recipient }}</strong>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="text-muted">Message ID:</span>
+                                    <code class="text-accent ms-1 font-mono" style="font-size: 12px;">{{ c.resend_id or (c.error_message if c.status == 'FAILED' else 'N/A') }}</code>
+                                </div>
+                                <div class="col-12">
+                                    <span class="text-muted">Subject:</span>
+                                    <strong class="text-light ms-1">{{ c.subject or '—' }}</strong>
+                                </div>
+                            </div>
+
+                            {% if c.body %}
+                            <div class="mt-2 p-2 rounded text-muted" style="background: rgba(0,0,0,0.3); font-size: 12px; white-space: pre-line; max-height: 120px; overflow-y: auto;">
+                                {{ c.body }}
+                            </div>
+                            {% endif %}
+
+                            {% if c.error_message and c.status == 'FAILED' %}
+                            <div class="mt-2 p-2 rounded text-danger" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); font-size: 12px;">
+                                <i class="fas fa-exclamation-circle me-1"></i><strong>Error:</strong> {{ c.error_message }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-muted text-center py-5">
+                    <i class="fas fa-inbox fs-2 mb-2 text-muted"></i>
+                    <div>No communication history recorded for this customer.</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

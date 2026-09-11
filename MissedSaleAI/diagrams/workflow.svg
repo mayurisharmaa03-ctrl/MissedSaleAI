@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1350" width="100%" height="100%" style="background:#0b1120; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#000000" flood-opacity="0.45" />
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#60a5fa" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f87171" />
+    </marker>
+  </defs>
+
+  <!-- Title Header -->
+  <rect x="50" y="25" width="900" height="70" rx="14" fill="#1e293b" stroke="#334155" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="80" y="60" fill="#f8fafc" font-size="22" font-weight="800" letter-spacing="-0.5">MissedSale AI – Autonomous Execution Workflow</text>
+  <text x="80" y="80" fill="#94a3b8" font-size="13">Detailed Logic Flowchart with Dual Decision Branches and Adaptation Cycles</text>
+  <rect x="800" y="42" width="125" height="34" rx="17" fill="#0284c7" />
+  <text x="862" y="64" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">FLOWCHART</text>
+
+  <!-- START Node (Pill) -->
+  <rect x="420" y="125" width="160" height="46" rx="23" fill="#0284c7" filter="url(#shadow)" />
+  <text x="500" y="153" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">START</text>
+  <path d="M 500 171 L 500 200" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Step 1: Observe Customer Behavior -->
+  <rect x="340" y="200" width="320" height="52" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="500" y="232" fill="#ffffff" font-size="14" font-weight="600" text-anchor="middle">1. Observe Customer Behavior</text>
+  <path d="M 500 252 L 500 280" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Step 2: Load Customer History -->
+  <rect x="340" y="280" width="320" height="52" rx="8" fill="#1e293b" stroke="#60a5fa" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="500" y="312" fill="#ffffff" font-size="14" font-weight="600" text-anchor="middle">2. Load Customer History &amp; Orders</text>
+  <path d="M 500 332 L 500 360" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Step 3: Analyze Behavior & Session -->
+  <rect x="340" y="360" width="320" height="52" rx="8" fill="#1e293b" stroke="#818cf8" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="500" y="392" fill="#ffffff" font-size="14" font-weight="600" text-anchor="middle">3. Extract Session Intent &amp; CLV</text>
+  <path d="M 500 412 L 500 440" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Step 4: ML Prediction -->
+  <rect x="320" y="440" width="360" height="52" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="500" y="472" fill="#fbbf24" font-size="14" font-weight="700" text-anchor="middle">4. Scikit-Learn ML Prediction (RF)</text>
+  <path d="M 500 492 L 500 520" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Decision Diamond 1: Is Recovery Opportunity? -->
+  <polygon points="500,520 640,575 500,630 360,575" fill="#1e293b" stroke="#f59e0b" stroke-width="2" filter="url(#shadow)" />
+  <text x="500" y="570" fill="#fde68a" font-size="13" font-weight="700" text-anchor="middle">Is Recovery</text>
+  <text x="500" y="588" fill="#fde68a" font-size="13" font-weight="700" text-anchor="middle">Opportunity?</text>
+
+  <!-- Branch 1: NO -> Monitor (Side) -->
+  <path d="M 640 575 L 750 575" stroke="#f87171" stroke-width="2.5" marker-end="url(#arrow-red)" />
+  <text x="690" y="565" fill="#f87171" font-size="12" font-weight="700">NO</text>
+  <rect x="750" y="550" width="180" height="50" rx="8" fill="#1e293b" stroke="#ef4444" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="840" y="580" fill="#fca5a5" font-size="13" font-weight="600" text-anchor="middle">Passive Monitoring</text>
+
+  <!-- Branch 1: YES -> Continue down -->
+  <path d="M 500 630 L 500 660" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrow-green)" />
+  <text x="515" y="648" fill="#34d399" font-size="12" font-weight="700">YES</text>
+
+  <!-- Step 5: Calculate Priority & Agent Reasoning -->
+  <rect x="310" y="660" width="380" height="52" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="500" y="692" fill="#d8b4fe" font-size="14" font-weight="600" text-anchor="middle">5. Calculate Priority &amp; Multi-Factor Reasoning</text>
+  <path d="M 500 712 L 500 740" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Step 6: Select Action & Update CRM -->
+  <rect x="310" y="740" width="380" height="52" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="500" y="772" fill="#93c5fd" font-size="14" font-weight="600" text-anchor="middle">6. Select Action &amp; Update CRM Opportunity</text>
+  <path d="M 500 792 L 500 820" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Step 7: Formulate Template & Send via Resend -->
+  <rect x="310" y="820" width="380" height="52" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="500" y="852" fill="#6ee7b7" font-size="14" font-weight="600" text-anchor="middle">7. Generate Personalized Email &amp; Send via Resend</text>
+  <path d="M 500 872 L 500 900" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Step 8: Monitor Customer Stream -->
+  <rect x="330" y="900" width="340" height="52" rx="8" fill="#1e293b" stroke="#60a5fa" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="500" y="932" fill="#ffffff" font-size="14" font-weight="600" text-anchor="middle">8. Monitor Real-Time Customer Stream</text>
+  <path d="M 500 952 L 500 980" stroke="#60a5fa" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <!-- Decision Diamond 2: Did Customer Purchase? -->
+  <polygon points="500,980 640,1035 500,1090 360,1035" fill="#1e293b" stroke="#10b981" stroke-width="2" filter="url(#shadow)" />
+  <text x="500" y="1030" fill="#6ee7b7" font-size="13" font-weight="700" text-anchor="middle">Did Customer</text>
+  <text x="500" y="1048" fill="#6ee7b7" font-size="13" font-weight="700" text-anchor="middle">Purchase?</text>
+
+  <!-- Branch 2: YES -> RECOVERED -->
+  <path d="M 640 1035 L 750 1035" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrow-green)" />
+  <text x="690" y="1025" fill="#34d399" font-size="12" font-weight="700">YES</text>
+  <rect x="750" y="1005" width="200" height="60" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="850" y="1032" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">Status: RECOVERED</text>
+  <text x="850" y="1052" fill="#a7f3d0" font-size="11" text-anchor="middle">Record Revenue &amp; Halt Outreach</text>
+
+  <!-- Branch 2: NO -> Evaluate Follow-up & Adapt -->
+  <path d="M 500 1090 L 500 1125" stroke="#f87171" stroke-width="2.5" marker-end="url(#arrow-red)" />
+  <text x="515" y="1110" fill="#f87171" font-size="12" font-weight="700">NO</text>
+
+  <!-- Step 9: Evaluate Follow-up & Adapt -->
+  <rect x="310" y="1125" width="380" height="65" rx="8" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="500" y="1152" fill="#fda4af" font-size="14" font-weight="700" text-anchor="middle">9. Evaluate Follow-up &amp; Contact Fatigue</text>
+  <text x="500" y="1173" fill="#94a3b8" font-size="11" text-anchor="middle">Attempts &lt; Max? Schedule Follow-up | Attempts &gt;= Max? Suppress (ADAPT)</text>
+
+  <!-- Adaptation feedback loop back to start -->
+  <path d="M 310 1157 L 200 1157 L 200 226 L 340 226" stroke="#fbbf24" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)" fill="none" />
+  <text x="230" y="680" fill="#fbbf24" font-size="12" font-weight="700" transform="rotate(-90 230 680)">ADAPTATION POLICY FEEDBACK</text>
+
+  <!-- END Node (Pill) -->
+  <rect x="420" y="1230" width="160" height="46" rx="23" fill="#334155" filter="url(#shadow)" />
+  <text x="500" y="1258" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">CYCLE COMPLETE</text>
+  <path d="M 500 1190 L 500 1230" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrow)" />
+</svg>

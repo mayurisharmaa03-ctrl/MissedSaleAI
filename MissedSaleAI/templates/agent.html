@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Autonomous Agent Control Center – MissedSale AI{% endblock %}
+{% block page_heading %}Autonomous Sales Recovery Agent Control Center{% endblock %}
+
+{% block content %}
+<!-- Agent Live Status Header Card -->
+<div class="card-saas mb-4">
+    <div class="card-body-saas p-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="brand-icon" style="width: 52px; height: 52px; font-size: 24px;">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h4 class="text-white mb-0 font-weight-bold">Autonomous Recovery Agent Engine</h4>
+                            <span class="badge bg-success font-mono">STATUS: {{ agent_status.status }}</span>
+                        </div>
+                        <p class="text-muted mb-0" style="font-size: 13px;">
+                            Autonomous loop continuously observing customer session triggers, inferring purchase intent, generating custom incentive copy, and adapting recovery strategies.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <button id="batchAgentBtn" class="btn btn-primary-saas px-4 py-2" onclick="runBatchAgent(5)">
+                    <i class="fas fa-play-circle"></i> Run Autonomous Batch Cycle (5 Carts)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Autonomous 7-Step Stepper Display -->
+<div id="agentStepperContainer" class="card-saas mb-4 d-none" style="border-color: var(--primary);">
+    <div class="card-header-saas bg-dark border-bottom border-primary">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <h5 class="text-white mb-0"><i class="fas fa-sync fa-spin text-primary me-2"></i>Live Autonomous Agent Loop</h5>
+            <span id="agentLiveStatusText" class="badge bg-dark border border-primary text-primary font-mono">Initializing Agent Cycle...</span>
+        </div>
+    </div>
+    <div class="card-body-saas">
+        <!-- Visual Stepper Progress Bar -->
+        <div class="agent-stepper">
+            <div class="step-item" id="step-observe">
+                <div class="step-circle"><i class="fas fa-eye"></i></div>
+                <div class="step-label">1. Observe</div>
+            </div>
+            <div class="step-item" id="step-analyze">
+                <div class="step-circle"><i class="fas fa-search-dollar"></i></div>
+                <div class="step-label">2. Analyze</div>
+            </div>
+            <div class="step-item" id="step-predict">
+                <div class="step-circle"><i class="fas fa-brain"></i></div>
+                <div class="step-label">3. Predict</div>
+            </div>
+            <div class="step-item" id="step-decide">
+                <div class="step-circle"><i class="fas fa-balance-scale"></i></div>
+                <div class="step-label">4. Decide</div>
+            </div>
+            <div class="step-item" id="step-act">
+                <div class="step-circle"><i class="fas fa-tools"></i></div>
+                <div class="step-label">5. Act</div>
+            </div>
+            <div class="step-item" id="step-monitor">
+                <div class="step-circle"><i class="fas fa-radar"></i></div>
+                <div class="step-label">6. Monitor</div>
+            </div>
+            <div class="step-item" id="step-adapt">
+                <div class="step-circle"><i class="fas fa-shield-alt"></i></div>
+                <div class="step-label">7. Adapt</div>
+            </div>
+        </div>
+
+        <!-- Execution Details & Reasoning Output -->
+        <div id="executionLogsContainer" class="mt-4"></div>
+    </div>
+</div>
+
+<!-- Pending Customers / Abandoned Carts Table -->
+<div class="card-saas mb-4">
+    <div class="card-header-saas">
+        <div>
+            <h5 class="mb-1"><i class="fas fa-shopping-basket text-danger me-2"></i>Observed Uncompleted Shopping Sessions</h5>
+            <p class="text-muted mb-0" style="font-size: 12px;">Real-time visitor sessions with cart additions or uncompleted checkout awaiting agent evaluation</p>
+        </div>
+        <span class="badge bg-dark border border-secondary text-secondary font-mono">{{ pending_behaviors|length }} Pending Sessions</span>
+    </div>
+    <div class="card-body-saas p-0">
+        <div class="table-responsive">
+            <table class="table-saas mb-0">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Target Product</th>
+                        <th>Cart Additions</th>
+                        <th>Checkout Started</th>
+                        <th>Session Duration</th>
+                        <th>Last Activity</th>
+                        <th class="text-end">Autonomous Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in pending_behaviors %}
+                    <tr>
+                        <td>
+                            <strong>{{ b.customer.name }}</strong>
+                            <div class="text-muted" style="font-size: 11px;">{{ b.customer.email }} | <span class="badge bg-dark border border-secondary" style="font-size: 9px;">{{ b.customer.customer_value }} Tier</span></div>
+                        </td>
+                        <td>
+                            <strong class="text-white">{{ b.product.name if b.product else 'Various Items' }}</strong>
+                            <div class="text-muted" style="font-size: 11px;">₹{{ "{:,.2f}".format(b.product.price if b.product else 99.0) }}</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-dark text-info font-mono" style="font-size: 11px;">{{ b.cart_added }} items</span>
+                        </td>
+                        <td>
+                            {% if b.checkout_started %}
+                            <span class="badge bg-danger text-white"><i class="fas fa-check me-1"></i>Yes (High Intent)</span>
+                            {% else %}
+                            <span class="badge bg-secondary text-light">No (Cart Only)</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="font-mono text-muted" style="font-size: 12px;">{{ b.session_duration|round(0) }}s</span>
+                        </td>
+                        <td>
+                            <span class="font-mono text-muted" style="font-size: 11px;">{{ b.last_activity.strftime('%b %d, %I:%M %p') if b.last_activity else 'Just now' }}</span>
+                        </td>
+                        <td class="text-end">
+                            <button id="runAgentBtn-{{ b.customer_id }}" class="btn btn-primary-saas py-1 px-3" onclick="runAgentForCustomer({{ b.customer_id }})">
+                                <i class="fas fa-play me-1"></i> Run Agent
+                            </button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">No pending abandoned carts detected.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Manual Customer Agent Runner Form -->
+<div class="card-saas">
+    <div class="card-header-saas">
+        <h5><i class="fas fa-user-check text-accent me-2"></i>Run Recovery Agent on Specific Customer Account</h5>
+    </div>
+    <div class="card-body-saas">
+        <div class="row align-items-center g-3">
+            <div class="col-md-8">
+                <select id="selectedCustomerInput" class="form-select form-control-saas">
+                    {% for c in all_customers %}
+                    <option value="{{ c.id }}">{{ c.name }} ({{ c.email }}) – {{ c.customer_value }} Tier</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary-saas w-100 py-2 justify-content-center" onclick="runAgentForCustomer(document.getElementById('selectedCustomerInput').value)">
+                    <i class="fas fa-robot me-1"></i> Launch Autonomous Agent
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

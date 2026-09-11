@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Leads &amp; Abandoned Sessions – MissedSale AI{% endblock %}
+{% block page_heading %}Inbound Leads &amp; Drop-off Sessions{% endblock %}
+
+{% block content %}
+<div class="card-saas mb-4">
+    <div class="card-body-saas p-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h4 class="text-white mb-1 font-weight-bold"><i class="fas fa-filter text-primary me-2"></i>Visitor Drop-off Sessions &amp; Cart Activity</h4>
+                <p class="text-muted mb-0" style="font-size: 13px;">
+                    Real-time browsing stream of visitors who added items or dropped off during checkout without purchase.
+                </p>
+            </div>
+            <div>
+                <button class="btn btn-primary-saas px-3 py-2" onclick="runBatchAgent(5)">
+                    <i class="fas fa-play me-1"></i> Run Agent on Pending Leads
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card-saas">
+    <div class="card-header-saas d-flex align-items-center justify-content-between">
+        <h5>Tracked Lead Sessions ({{ leads|length }})</h5>
+        <span class="badge bg-dark border border-secondary text-info">Live Stream</span>
+    </div>
+    <div class="card-body-saas p-0">
+        <div class="table-responsive">
+            <table class="table-saas mb-0">
+                <thead>
+                    <tr>
+                        <th>Lead / Customer</th>
+                        <th>Target Product</th>
+                        <th>Cart Items</th>
+                        <th>Checkout Initiated</th>
+                        <th>Session Duration</th>
+                        <th>Last Observed</th>
+                        <th>Autonomous Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in leads %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="avatar-circle-sm" style="width: 32px; height: 32px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #fff;">
+                                    {{ lead.customer.name[:2].upper() if lead.customer else 'LD' }}
+                                </div>
+                                <div>
+                                    <a href="{{ url_for('customers.customer_detail', customer_id=lead.customer_id) }}" class="text-white fw-bold text-decoration-none">
+                                        {{ lead.customer.name if lead.customer else 'Anonymous Visitor' }}
+                                    </a>
+                                    <div class="text-muted" style="font-size: 11px;">{{ lead.customer.email if lead.customer else 'No email' }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="text-light fw-medium">{{ lead.product.name if lead.product else 'Various Catalog Items' }}</span>
+                            <div class="text-muted font-mono" style="font-size: 11px;">₹{{ "{:,.2f}".format(lead.product.price) if lead.product else '0.00' }}</div>
+                        </td>
+                        <td>
+                            {% if lead.cart_added > 0 %}
+                            <span class="badge bg-primary font-mono"><i class="fas fa-shopping-cart me-1"></i>{{ lead.cart_added }} Added</span>
+                            {% else %}
+                            <span class="text-muted font-mono">0 (Browsed)</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if lead.checkout_started %}
+                            <span class="badge bg-warning text-dark font-mono"><i class="fas fa-check me-1"></i>YES (Drop-off)</span>
+                            {% else %}
+                            <span class="text-muted font-mono">No</span>
+                            {% endif %}
+                        </td>
+                        <td class="font-mono text-light">{{ lead.session_duration|round(0)|int }}s</td>
+                        <td class="font-mono text-muted" style="font-size: 11px;">{{ lead.last_activity.strftime('%Y-%m-%d %I:%M %p') if lead.last_activity else 'Just now' }}</td>
+                        <td>
+                            <button class="btn btn-secondary-saas btn-sm py-1 px-2" onclick="runAgentForCustomer({{ lead.customer_id }})">
+                                <i class="fas fa-brain text-accent me-1"></i> Run Agent
+                            </button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">No lead drop-off sessions detected.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

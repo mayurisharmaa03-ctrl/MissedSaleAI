@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Detected Lost Sales – MissedSale AI{% endblock %}
+{% block page_heading %}Detected Lost Sales & Abandoned Carts{% endblock %}
+
+{% block content %}
+<div class="card-saas mb-4">
+    <div class="card-body-saas p-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h4 class="text-white mb-1 font-weight-bold"><i class="fas fa-shopping-cart text-danger me-2"></i>Lost Sales Detection Feed</h4>
+                <p class="text-muted mb-0" style="font-size: 13px;">
+                    Identified instances where shopping sessions resulted in cart abandonment, incomplete checkouts, or dropped purchase journeys.
+                </p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-dark border border-danger text-danger font-mono px-3 py-2">
+                    {{ lost_sales|length }} Total Lost Sales Detected
+                </span>
+                <a href="{{ url_for('agent.agent_control') }}" class="btn btn-primary-saas">
+                    <i class="fas fa-play me-1"></i> Run Recovery Cycle
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card-saas">
+    <div class="card-header-saas">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <h5 class="mb-0">Detected Lost Sales Ledger</h5>
+            <span class="badge bg-dark border border-secondary text-secondary font-mono">{{ lost_sales|length }} Records</span>
+        </div>
+    </div>
+    <div class="card-body-saas p-0">
+        <div class="table-responsive">
+            <table class="table-saas mb-0">
+                <thead>
+                    <tr>
+                        <th>Lost Sale ID</th>
+                        <th>Customer</th>
+                        <th>Target Product</th>
+                        <th>ML Lost Probability</th>
+                        <th>Status</th>
+                        <th>Detected Time</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ls in lost_sales %}
+                    <tr>
+                        <td class="font-mono text-muted">#LS-{{ ls.id }}</td>
+                        <td>
+                            <a href="{{ url_for('customers.customer_detail', customer_id=ls.customer_id) }}" class="text-white text-decoration-none fw-bold">
+                                {{ ls.customer.name }}
+                            </a>
+                            <div class="text-muted" style="font-size: 11px;">{{ ls.customer.email }}</div>
+                        </td>
+                        <td>
+                            <strong>{{ ls.product.name if ls.product else 'Cart Items' }}</strong>
+                            <div class="text-muted" style="font-size: 11px;">₹{{ "{:,.2f}".format(ls.product.price if ls.product else 99.0) }}</div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="progress flex-grow-1" style="height: 6px; background: rgba(255,255,255,0.05); width: 70px;">
+                                    <div class="progress-bar bg-danger" style="width: {{ ls.lost_probability * 100 }}%"></div>
+                                </div>
+                                <span class="font-mono text-danger fw-bold" style="font-size: 12px;">{{ (ls.lost_probability * 100)|round(1) }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge {% if ls.status == 'RECOVERED' %}badge-status-recovered{% elif ls.status == 'DETECTED' %}bg-danger text-white{% else %}bg-secondary{% endif %}">
+                                {{ ls.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="font-mono text-muted" style="font-size: 12px;">{{ ls.detected_at.strftime('%Y-%m-%d %I:%M %p') if ls.detected_at else 'N/A' }}</span>
+                        </td>
+                        <td class="text-end">
+                            <button class="btn btn-primary-saas py-1 px-3" style="font-size: 11px;" onclick="runAgentForCustomer({{ ls.customer_id }})">
+                                <i class="fas fa-robot me-1"></i> Engage Agent
+                            </button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">No lost sales recorded yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

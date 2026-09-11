@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Product Catalog – MissedSale AI{% endblock %}
+{% block page_heading %}Product Catalog &amp; Inventory Intelligence{% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card-saas p-3">
+            <div class="text-muted" style="font-size: 12px; text-transform: uppercase;">Total Active SKUs</div>
+            <div class="text-white font-weight-bold font-mono" style="font-size: 24px;">{{ products|length }} Products</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card-saas p-3">
+            <div class="text-muted" style="font-size: 12px; text-transform: uppercase;">Total Stock in Warehouses</div>
+            <div class="text-info font-weight-bold font-mono" style="font-size: 24px;">{{ total_stock }} Units</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card-saas p-3">
+            <div class="text-muted" style="font-size: 12px; text-transform: uppercase;">Currency Standard</div>
+            <div class="text-success font-weight-bold font-mono" style="font-size: 24px;">₹ INR (Indian Rupee)</div>
+        </div>
+    </div>
+</div>
+
+<div class="card-saas">
+    <div class="card-header-saas d-flex align-items-center justify-content-between">
+        <h5>Catalog SKUs &amp; Pricing</h5>
+        <span class="badge bg-dark border border-secondary text-primary font-mono">16 Products Active</span>
+    </div>
+    <div class="card-body-saas p-0">
+        <div class="table-responsive">
+            <table class="table-saas mb-0">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price (₹)</th>
+                        <th>Inventory Stock</th>
+                        <th>Recovery Affinity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+                    <tr>
+                        <td class="font-mono text-muted">#PROD-{{ p.id }}</td>
+                        <td>
+                            <strong class="text-white">{{ p.name }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-dark border border-secondary text-light">{{ p.category }}</span>
+                        </td>
+                        <td class="font-mono text-success fw-bold" style="font-size: 15px;">
+                            ₹{{ "{:,.2f}".format(p.price) }}
+                        </td>
+                        <td>
+                            {% if p.stock > 30 %}
+                            <span class="badge bg-success font-mono">{{ p.stock }} in stock</span>
+                            {% elif p.stock > 10 %}
+                            <span class="badge bg-warning text-dark font-mono">{{ p.stock }} remaining</span>
+                            {% else %}
+                            <span class="badge bg-danger font-mono">Low ({{ p.stock }})</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if p.price >= 40000 %}
+                            <span class="badge badge-priority-high font-mono">High Margin (VIP Priority)</span>
+                            {% elif p.price >= 15000 %}
+                            <span class="badge badge-priority-medium font-mono">Medium Value</span>
+                            {% else %}
+                            <span class="badge badge-priority-low font-mono">High Volume</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
