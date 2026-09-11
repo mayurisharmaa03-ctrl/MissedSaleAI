@@ -20,8 +20,12 @@ class Config:
     
     # Test if PostgreSQL can be connected to, otherwise fallback
     DATABASE_URL = os.getenv("DATABASE_URL")
+    IS_VERCEL = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
     if not DATABASE_URL:
-        DATABASE_URL = SQLITE_DATABASE_URL
+        if IS_VERCEL:
+            DATABASE_URL = "sqlite:////tmp/missedsale.db"
+        else:
+            DATABASE_URL = SQLITE_DATABASE_URL
         
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False

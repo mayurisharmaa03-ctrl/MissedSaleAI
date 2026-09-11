@@ -1,0 +1,5 @@
+[tool.vercel]
+entrypoint = "MissedSaleAI.app:app"
+
+[tool.pytest.ini_options]
+norecursedirs = ["agent", "config"]
