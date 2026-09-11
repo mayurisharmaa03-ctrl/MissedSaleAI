@@ -23,7 +23,9 @@ class Config:
     IS_VERCEL = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
     if not DATABASE_URL:
         if IS_VERCEL:
-            DATABASE_URL = "sqlite:////tmp/missedsale.db"
+            import tempfile
+            temp_db = Path(tempfile.gettempdir()) / "missedsale.db"
+            DATABASE_URL = f"sqlite:///{temp_db.as_posix()}"
         else:
             DATABASE_URL = SQLITE_DATABASE_URL
         
